@@ -1,192 +1,125 @@
-#include<iostream> 
-#include<stdio> //gets() and puts()
-#include<stdlib> //exit()
+#include <iostream>
 using namespace std;
-class banking
-{
-  // by default member are private
-   int amount,ac_number;
-   char cust_name[20],ac_type;
- public:
- // member are public
-   void get_record();
-   friend void show_record(banking); // displaying customer record
-   int re_amount();  // to return spacific customer amount
-   int re_account(); // to return spacific customer account
-   int deposit();    // deposit into account
-   int withdraw();   // withdraw from account
-};
- // storing data from user
-    void banking::get_record()
-      {
-	 cout<<"Enter Account No: ";
-	 cin>>ac_number;
-	 cout<<"Enter the Name: ";
-	 gets(cust_name);
-	 cout<<"Enter the Account type(CS): ";
-	 cin>>ac_type;
-	 cout<<"Enter the Amount: ";
-	 cin>>amount;
-      }
-     // return amount a specific customer
-     int banking::re_amount()
-     {
-      return(amount);
-     }
-// using friend function to displaying customer record so not need to :: operator for defination
-    void show_record(banking obj)
+
+// class
+class Bank {
+private:
+    int acno;
+    char name[30];
+    long balance;
+
+public:
+    void OpenAccount()
     {
-       // obj can access private member of same class
-       cout<<"Account No : "<<obj.ac_number<<"n";
-       cout<<"Name : ";puts(obj.cust_name);
-       cout<<"Account Type : "<<obj.ac_type<<"n";
-       cout<<"Amount : "<<obj.amount<<"n";
+        cout << "Enter Account Number: ";
+        cin >> acno;
+        cout << "Enter Name: ";
+        cin >> name;
+        cout << "Enter  Balance: ";
+        cin >> balance;
     }
-   // return account a customer
-   int banking::re_account()
-   {
-      return(ac_number);
-   }
-  int banking::deposit()
-  {
-     int d;
-     cout<<"Enter the ammount to be deposit: ";
-     cin>>d;
-     amount = amount+d;
-     return amount;    // return total depsit in account
-  }
-  int banking::withdraw()
-  {
-     int w;
-     if(amount<500)
-     {
-      cout<<endl;
-      cout<<"Sorry! Insuficient Balance transection not available";}else{
-      cout<<"nEnter the ammount to be withdraw: n";
-      cin>>w;
-      amount = amount-w;
-      cout<<"amount successfully withdraw";
-     }
-     return amount; // return wiithdraw amount
+    void ShowAccount()
+    {
+        cout << "Account Number: " << acno << endl;
+        cout << "Name: " << name << endl;
+        cout << "Balance: " << balance << endl;
     }
-// starting main function
+    void Deposit()
+    {
+        long amt;
+        cout << "Enter Amount U want to deposit? ";
+        cin >> amt;
+        balance = balance + amt;
+    }
+    void Withdrawal()
+    {
+        long amt;
+        cout << "Enter Amount U want to withdraw? ";
+        cin >> amt;
+        if (amt <= balance)
+            balance = balance - amt;
+        else
+            cout << "Less Balance..." << endl;
+    }
+    int Search(int);
+};
+
+int Bank::Search(int a)
+{
+    if (acno == a) {
+        ShowAccount();
+        return (1);
+    }
+    return (0);
+}
+
+// main code
 int main()
 {
-     
-     banking x[6];      //that means we can store 6 customer at a time.
-     int ch,count,account,amount;
-  do{
-	start:
-	cout<<"nnntttt****BANKING****nn";
-	cout<<"tttt1.CREATE ACCOUNTnn";
-	cout<<"tttt2.DEPOSITnn";
-	cout<<"tttt3.WITHDRAWnn";
-	cout<<"tttt4.DISPLAY ALL ACCOUNTnn";
-	cout<<"tttt5.SEARCHnn";
-	cout<<"tttt0.EXITnnnn";
-	int n=0;
-	while(n<80)
-	{
-	 cout<<"_";n++;  // printing a line
-	}
-	cout<<endl;
-	cout<<"tttttEnter Your Choice: ";
-	cin>>ch;
-	switch(ch)
-	{
-	case 1: 
-		int cust;
-		cout<<"How Many Customer Record you want to Store: ";
-		cin>>cust;
-		for(count=0;count<cust;count++)
-		{
-		  cout<<count+1<<". ACCOUNTn";
-		  x[count].get_record();  // get_record function calling
-		  cout<<"nn";
-		  cout<<"Account Created Successfully";
-		  
-		}
-		break;
-	case 2: 
-		int true=0;
-		cout<<"nEnter the Account No:";
-		cin>>account;
-		for(count=0;count<cust;count++)
-		{
-		 if(account==x[count].re_account())
-		 {
-		   x[count].deposit(); // deposit function calling
-		   cout<<"Amount Successfully Deposit";
-		  
-		   true=1;
-		 }
-		}
-		if(!true)
-		{
-		  cout<<"Account Not Found";
-		
-		}
-		break;
-      case 3:  
-		int right=0;
-		cout<<"nEnter the account No:";
-		cin>>account;
-		for(count=0;count<cust;count++)
-		{
-		 if(account==x[count].re_account())   // check account match or not
-		 {
-		   x[count].withdraw();
-		   
-		   right=1;
-		 }
-		}
-		if(!right)
-		{
-		 cout<<"Account Not Found";
-		
-		}
-		break;
-      case 4:  
-		int a;
-		cout<<"tALL ACCOUNT DISPLAY:n";
-		cout<<"==================================n";
-		for(count=0;count<cust;count++)
-		{
-		 if(x[count].re_account()==0)
-		    return;
-		 cout<<count+1<<". ACCOUNTn";
-		 cout<<"--------------------------------------n";
-		 show_record(x[count]);   // display all account record
-		 cout<<"=====================================n";
-		
-		}
-		
-		break;
-      case 5:  
-		int search,correct=0;
-		cout<<"nEnter account No. to be search: ";
-		cin>>search;
-		for(count=0;count<cust;count++)
-		{
-		 if(search==x[count].re_account())
-		 {
-		   cout<<endl<<count+1<<". ACCOUNTn";
-		   show_record(x[count]);   // display search account detail
-		   correct=1;
-		 
-		 }
-		}
-		if(!correct)  {
-		   cout<<"nThis Acount Not Available....Try Again.";
-		   
-		   goto start;
-			      }
-		   break;
-      case 0:  exit(0);
-	      break;
-      default: cout<<"Invalid Choice";
-		
-		goto start;
-	}
-  }while(ch!=0);
+    Bank C[3];
+
+    int found = 0, a, ch, i;
+    for (i = 0; i <= 2; i++) {
+        C[i].OpenAccount();
+    }
+
+    do {
+        // display options
+        cout << "\n\n1:Display All\n2:By Account No\n3:Deposit\n4:Withdraw\n5:Exit" << endl;
+
+        // user input
+        cout << "Please input your choice: ";
+        cin >> ch;
+
+        switch (ch) {
+        case 1: // displating account info
+            for (i = 0; i <= 2; i++) {
+                C[i].ShowAccount();
+            }
+            break;
+        case 2: // searching the record
+            cout << "Account Number? ";
+            cin >> a;
+            for (i = 0; i <= 2; i++) {
+                found = C[i].Search(a);
+                if (found)
+                    break;
+            }
+            if (!found)
+                cout << "Record Not Found" << endl;
+            break;
+        case 3: // deposit operation
+            cout << "Account Number To Deposit Amount? ";
+            cin >> a;
+            for (i = 0; i <= 2; i++) {
+                found = C[i].Search(a);
+                if (found) {
+                    C[i].Deposit();
+                    break;
+                }
+            }
+            if (!found)
+                cout << "Record Not Found" << endl;
+            break;
+        case 4: // withdraw operation
+            cout << "Account Number To Withdraw Amount? ";
+            cin >> a;
+            for (i = 0; i <= 2; i++) {
+                found = C[i].Search(a);
+                if (found) {
+                    C[i].Withdrawal();
+                    break;
+                }
+            }
+            if (!found)
+                cout << "Record Not Found" << endl;
+            break;
+        case 5: // exit
+            cout << "Have a nice day" << endl;
+            break;
+        default:
+            cout << "Wrong Option" << endl;
+        }
+    } while (ch != 5);
+    return 0;
 }
